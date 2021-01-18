@@ -2,24 +2,38 @@ version: "2.1"
 
 
 services:
+  webapp:
+    build: ./webapp
+    container_name: flask_app
+    restart: always
+    environment:
+      DATABASE: ${DATABASE}
+      TABLE: ${MAIN_TABLE}
+      ROOT_PASSWORD: ${ROOT_PASSWORD}
+    ports:
+      - 80:5000
+
   database:
     image: mysql:8.0
-    container_name: mysql_global
+    container_name: flask_mysql
     restart: always
     command: --default-authentication-plugin=mysql_native_password
+    environment: 
+      MAIN_TABLE: ${MAIN_TABLE}
+      #DATABASE: ${DATABASE}
+      MYSQL_USER: ${MYSQL_USER} 
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD} 
+      MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE}
+
     volumes:
       - ./mysql:/docker-entrypoint-initdb.d
-    environment: 
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: main_base
     ports:
       - 3308:3306
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+  #adminer:
+    #image: adminer
+    #restart: always
+    #ports:
+      #- 80:8080
 
