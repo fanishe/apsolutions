@@ -5,7 +5,6 @@ import time
 import mysql.connector
 import mysql.connector.pooling
 
-from objects.servers import WFServer
 
 class Database():
     """class for database"""
@@ -58,7 +57,7 @@ class Database():
                         self.section, self.config_file))
             return dbase
 
-        if self.config_file.endswith('.ini'):
+        if self.config_file.endswith('.json'):
             with open(self.config_file, 'r') as file:
                 parser = json.load(file)
             dbase = {}
@@ -99,14 +98,16 @@ class Database():
                 if cursor:
                     cursor.close()
 
-    def get_wf(self):
+    def search_text(self, text):
         """get credentials from DB"""
         data = self._run_query(
-            """SELECT
+            f"""SELECT
                     *
-                FROM Products
+                FROM {self.table}
                 WHERE
-                     ProductsType = 'WildFire';
+                     text  LIKE '%{text}%'
+                ORDER BY created_date
+                LIMIT 20;
             """)
         return data
 

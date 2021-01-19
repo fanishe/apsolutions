@@ -6,6 +6,6 @@ COPY requirements.txt /tmp
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 WORKDIR /webapp
-COPY src .
+COPY src/ /webapp/
 
 ENTRYPOINT ["python3", "app.py"]
