@@ -9,7 +9,6 @@
 
   <body>
     <div class="s01">
-      <!--<form method='GET' action="search_result"> -->
       <form method='POST'>
 
         <fieldset>
@@ -33,15 +32,26 @@
 
     </div>
 
-    <div>
-      {% if results %}
-        {% for res in results %}
-          <ul>
-            <li>{{ res }}</li>
-          </ul>
-        {% endfor %}
-      {% endif %}
-    </div>
+    {% if results %}
+        <div>
+          <table>
+              <tr>
+                <th>ID</th>
+                <th>TEXT</th>
+                <th>CREATED DATE</th>
+                <th>RUBRICS</th>
+              </tr>
+              {% for res in results %}
+              <tr>
+                  <td>{{ res[0] }}</td> 
+                  <td>{{ res[1] }}</td> 
+                  <td>{{ res[2] }}</td> 
+                  <td>{{ res[3] }}</td> 
+              </tr>
+              {% endfor %}
+          </table>
+        </div>
+    {% endif %}
 
   </body>
 </html>

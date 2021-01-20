@@ -73,12 +73,12 @@ class Database():
         """
         while True:
             cursor = None
+            logging.info("Run Query %s", query_command)
             try:
                 datas = []
                 conn = self.get_conn()
                 cursor = conn.cursor()
                 cursor.execute(query_command)
-                # row = cursor.fetchall()
                 for row in cursor:
                     datas.append(row)
                 conn.commit()
@@ -92,6 +92,7 @@ class Database():
             except Exception as err:
                 logging.exception(err)
             else:
+                logging.info("Result of Query - %s", datas)
                 return datas
             finally:
                 conn.close()
@@ -111,15 +112,20 @@ class Database():
         return data
 
     def delete_row(self, row_id):
-        try:
-            data = self._run_query(
+        """ Delete row from table """
+        data = self._run_query(
+            f"""SELECT id
+                FROM {self.table}
+                WHERE id = {row_id}
+            """)
+        if data:
+            self._run_query(
                 f"""DELETE
                     FROM {self.table}
-                    WHERE
-                         id = {row_id}
+                    WHERE id = {row_id}
                 """)
             exit_code = 0
-        except Exception as err:
+        else:
             exit_code = 1
 
         return exit_code
