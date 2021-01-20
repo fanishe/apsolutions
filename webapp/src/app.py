@@ -11,7 +11,7 @@ from database import Database
 TABLE = os.getenv('TABLE')
 DATABASE = os.getenv('DATABASE')
 DB_PASSWORD = os.getenv('ROOT_PASSWORD')
-
+DATABASE = Database("config.ini", "mysql", TABLE)
 
 app = Flask(__name__)
 app.secret_key = "flask rocks!"
@@ -29,12 +29,7 @@ def search_result(search):
     search_string = form.search.data
 
     results = []
-    database = Database(
-        "config.ini",
-        "mysql",
-        TABLE
-    )
-    results = database.search_text(search_string)
+    results = DATABASE.search_text(search_string)
 
     if not results:
         flash('No results found!')
@@ -47,15 +42,12 @@ def api_search():
     """ Принимает данные через адресную строку
         Посылает json ответ
     """
-    database = Database(
-        "config.ini",
-        "mysql",
-        TABLE
-    )
     data = request.args.get('data')
-    results = database.search_text(data)
+    results = DATABASE.search_text(data)
+
     if results:
         main_json = []
+
         for res in results:
             datetime = res[2].strftime("%Y-%m-%d %H:%M:%S")
             temp = {
@@ -70,6 +62,22 @@ def api_search():
     else:
         err_json = {"error" : "not_found"}
         return Response(json.dumps(err_json, ensure_ascii=False).encode('utf8'), mimetype='application/json')
+
+
+@app.route('/del', methods = ['POST', 'GET'])
+def delete_item():
+    """ Get row id for deletion
+        http://localhost:8888/del?id=38
+    """
+    data = request.args.get('id')
+    result = DATABASE.delete_row(data)
+
+    if reusult == 0:
+        answer = 'deleted'
+    else:
+        anwer = 'deletion_error'
+
+    return Response(json.dumps({"result": answer}, ensure_ascii=False).encode('utf8'), mimetype='application/json')
 
 
 if __name__ == '__main__':

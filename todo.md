@@ -20,6 +20,6 @@ LOAD DATA LOCAL INFILE '/mydata/posts.csv'
 ```
 
 ## Обработчик
-- [ ] Flask application
-- main page with seach bar
+- [x] Flask application
+- [x] main page with seach bar
 

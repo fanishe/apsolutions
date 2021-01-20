@@ -99,7 +99,6 @@ class Database():
                     cursor.close()
 
     def search_text(self, text):
-        """get credentials from DB"""
         data = self._run_query(
             f"""SELECT
                     *
@@ -111,3 +110,16 @@ class Database():
             """)
         return data
 
+    def delete_row(self, row_id):
+        try:
+            data = self._run_query(
+                f"""DELETE
+                    FROM {self.table}
+                    WHERE
+                         id = {row_id}
+                """)
+            exit_code = 0
+        except Exception as err:
+            exit_code = 1
+
+        return exit_code
