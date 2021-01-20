@@ -36,6 +36,7 @@
     - `/api_search` - принимает параметр `data=<sometext>`
         > `http://localhost:8888/api_search?data=hi`
       - Возвращает json ответ с ответом от БД
+          > `{"id": <id>, "text":<text>, "created_date":<date>, "rubrics":<rubrics>}`
     - `/del` - принимает параметр `id=<num>`
         > `http://localhost:8888/del?id=1`
         - Возвращает json ответ от БД 
@@ -44,8 +45,9 @@
             - Если нет:
               > `result:id_not_found`
     - Если данные не были переданы возвращает json ответ
-        > {"result":"give_me_id"}
+        > {"result":"give_me_id"} \
         > {"error" : "give_me_data"}
+- Логгирование в папке `logs`
 
 ## Реализовано:
 - [x] любой python фреймворк кроме Django и DRF;
